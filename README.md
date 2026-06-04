@@ -89,6 +89,31 @@ The application uses ThemeContext and useContext to manage and switch between li
 
 The application uses Redux Toolkit for cart state management. Products can be added, removed, and their quantity can be updated.
 
+## Performance Optimization
+
+### Animation
+
+- LayoutAnimation was added to ProductDetailsScreen.
+- The add-to-cart confirmation message is animated when it appears and disappears.
+- Android LayoutAnimation support is enabled through UIManager.
+
+### Render Optimization
+
+- ProductCard is wrapped with React.memo.
+- HomeScreen uses useMemo for coffee filtering.
+- HomeScreen uses useCallback for:
+  - search handlers
+  - category handlers
+  - FlatList renderItem
+- Render logging was added to observe ProductCard re-renders during development.
+
+### Dependency Cleanup
+
+- Direct dependencies were reduced from 29 to 18.
+- 11 unused Expo packages were removed.
+- npm run lint passed after cleanup.
+- Application functionality remained unchanged after dependency removal.
+
 ## Performance Evidence
 
 ### Product Details Confirmation Animation
