@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -63,24 +63,26 @@ export default function HomeScreen({ navigation }) {
     };
   }, []);
 
-  const visibleCoffees = coffees.filter((coffee) => {
+  // Memoize the filtered list so FlatList gets stable data when filters have not changed.
+  const visibleCoffees = useMemo(() => coffees.filter((coffee) => {
     const matchesCategory = activeCategory === 'All' || coffee.category === activeCategory;
     const matchesSearch = coffee.title.toLowerCase().includes(searchValue.toLowerCase());
 
     return matchesCategory && matchesSearch;
-  });
+  }), [activeCategory, coffees, searchValue]);
 
-  const handleSearchChange = (value) => {
+  // Stable handlers avoid unnecessary child renders when only unrelated state changes.
+  const handleSearchChange = useCallback((value) => {
     setSearchValue(value);
     setSelectedProduct('');
-  };
+  }, []);
 
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = useCallback((category) => {
     setActiveCategory(category);
     setSelectedProduct('');
-  };
+  }, []);
 
-  function renderCoffeeItem({ item }) {
+  const renderCoffeeItem = useCallback(({ item }) => {
     return (
       <ProductCard
         title={item.title}
@@ -110,7 +112,7 @@ export default function HomeScreen({ navigation }) {
         }}
       />
     );
-  }
+  }, [dispatch, navigation]);
 
   return (
     <View style={styles.container}>

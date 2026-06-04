@@ -1,6 +1,12 @@
 # CoffeeGo
 
-CoffeeGo is a React Native app built with Expo and React Navigation. This homework 08 version adds Fetch API integration with an external coffee API so the menu is loaded from remote data instead of hardcoded items.
+CoffeeGo is a React Native app built with Expo and React Navigation.
+
+The project demonstrates:
+- Fetch API integration
+- React Context API
+- Redux Toolkit state management
+- Performance optimization techniques
 
 ## API Integration
 
@@ -82,6 +88,18 @@ The application uses ThemeContext and useContext to manage and switch between li
 ![Redux Cart](assets/cart.png)
 
 The application uses Redux Toolkit for cart state management. Products can be added, removed, and their quantity can be updated.
+
+## Performance Evidence
+
+### Product Details Confirmation Animation
+![Product Details confirmation animation](assets/performance-animation.png)
+
+The add-to-cart confirmation message is animated using LayoutAnimation.
+
+### Dependency Cleanup Result
+![Dependency cleanup result](assets/dependency-cleanup.png)
+
+Direct dependencies were reduced from 29 to 18 after removing unused Expo packages.
 
 ## State Management
 

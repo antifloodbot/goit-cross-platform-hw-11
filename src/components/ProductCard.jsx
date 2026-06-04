@@ -1,12 +1,17 @@
+import { memo } from 'react';
 import { Image, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { colors } from '@/constants/colors';
 import CustomButton from './CustomButton';
 
-export default function ProductCard({ title, price, imageUrl, onPress, onAddToCart }) {
+function ProductCard({ title, price, imageUrl, onPress, onAddToCart }) {
   const { width } = useWindowDimensions();
   // Keep cards fluid on small screens while capping their width on wider layouts.
   const cardWidth = Math.min(width - 32, 420);
+
+  if (__DEV__) {
+    console.log('ProductCard render:', title);
+  }
 
   return (
     <Pressable style={[styles.card, { width: cardWidth }]} onPress={onPress}>
@@ -25,6 +30,9 @@ export default function ProductCard({ title, price, imageUrl, onPress, onAddToCa
     </Pressable>
   );
 }
+
+// Memo keeps unchanged coffee cards from re-rendering when parent state changes.
+export default memo(ProductCard);
 
 const styles = StyleSheet.create({
   card: {

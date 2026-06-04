@@ -1,7 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  LayoutAnimation,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  UIManager,
+  View,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { colors } from '@/constants/colors';
@@ -16,6 +26,15 @@ const tabs = [
   { label: 'Cart', icon: 'cart-outline' },
   { label: 'Profile', icon: 'person-outline' },
 ];
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+function animateAddedMessageLayout() {
+  // LayoutAnimation gives the confirmation message a visible mount/unmount transition.
+  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+}
 
 export default function ProductDetailsScreen({ route, navigation }) {
   const [selectedSize, setSelectedSize] = useState('S');
@@ -67,6 +86,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
                   style={[styles.sizeOption, isSelected && styles.selectedSizeOption]}
                   onPress={() => {
                     setSelectedSize(size);
+                    animateAddedMessageLayout();
                     setAddedMessage('');
                   }}
                   activeOpacity={0.8}
@@ -89,6 +109,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
                   size: selectedSize,
                 })
               );
+              animateAddedMessageLayout();
               setAddedMessage(`${product.title} added to cart`);
             }}
             activeOpacity={0.85}
@@ -100,7 +121,13 @@ export default function ProductDetailsScreen({ route, navigation }) {
         </View>
       </ScrollView>
 
-      <StaticBottomTabs navigation={navigation} onTabPress={() => setAddedMessage('')} />
+      <StaticBottomTabs
+        navigation={navigation}
+        onTabPress={() => {
+          animateAddedMessageLayout();
+          setAddedMessage('');
+        }}
+      />
     </View>
   );
 }
